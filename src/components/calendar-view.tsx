@@ -54,8 +54,8 @@ export function CalendarView({ bookings, onDayClick }: CalendarViewProps) {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-slate-800 mb-4 flex items-center">
-        <CalendarDays className="mr-2 h-5 w-5" /> Booking Calendar
+      <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
+        <CalendarDays className="mr-3 h-6 w-6 text-primary" /> Booking Calendar
       </h2>
       <div className="flex items-center justify-between mb-4">
         <Button variant="ghost" size="icon" onClick={previousMonth}>
@@ -77,18 +77,18 @@ export function CalendarView({ bookings, onDayClick }: CalendarViewProps) {
         <div>Fri</div>
         <div>Sat</div>
       </div>
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7 gap-2">
         {days.map((day, dayIdx) => {
           const dayBookingsCount = bookingsByDate[format(day, 'yyyy-MM-dd')] || 0;
           
           let bookingIndicatorClass = '';
-          if (dayBookingsCount > 0) {
+          if (dayBookingsCount > 0 && isSameMonth(day, firstDayCurrentMonth)) {
             if (dayBookingsCount >= 3) {
-              bookingIndicatorClass = 'bg-red-200/50';
+              bookingIndicatorClass = 'bg-red-500/20';
             } else if (dayBookingsCount >= 2) {
-              bookingIndicatorClass = 'bg-yellow-200/50';
+              bookingIndicatorClass = 'bg-yellow-500/20';
             } else {
-              bookingIndicatorClass = 'bg-green-200/50';
+              bookingIndicatorClass = 'bg-green-500/20';
             }
           }
 
@@ -97,18 +97,18 @@ export function CalendarView({ bookings, onDayClick }: CalendarViewProps) {
               key={day.toString()}
               className={cn(
                 dayIdx === 0 && colStartClasses[day.getDay()],
-                'h-16 border rounded-md p-1 flex flex-col justify-between transition-all ease-in-out duration-200'
+                'h-20 border rounded-lg p-1 flex flex-col justify-between transition-all ease-in-out duration-200 hover:shadow-md'
               )}
             >
               <button
                 onClick={() => onDayClick(day)}
                 className={cn(
-                  'w-full h-full flex flex-col items-center justify-center rounded-md',
+                  'w-full h-full flex flex-col items-center justify-center rounded-md relative group',
                   isSameMonth(day, firstDayCurrentMonth)
                     ? 'text-slate-800'
                     : 'text-slate-400',
                   !isToday(day) && 'hover:bg-primary/10',
-                  isToday(day) && 'bg-primary/20 text-primary-foreground',
+                  isToday(day) && 'bg-primary/20 text-primary-foreground font-bold',
                   bookingIndicatorClass,
                 )}
               >
@@ -116,8 +116,9 @@ export function CalendarView({ bookings, onDayClick }: CalendarViewProps) {
                   {format(day, 'd')}
                 </time>
                  {dayBookingsCount > 0 && isSameMonth(day, firstDayCurrentMonth) && (
-                    <span className="text-xs text-slate-600 mt-1">{dayBookingsCount} booking{dayBookingsCount > 1 ? 's' : ''}</span>
+                    <span className="text-xs text-slate-600 mt-1 absolute bottom-2 group-hover:opacity-0 transition-opacity">{dayBookingsCount} booking{dayBookingsCount > 1 ? 's' : ''}</span>
                  )}
+                 <span className="text-xs text-slate-600 mt-1 absolute bottom-2 opacity-0 group-hover:opacity-100 transition-opacity font-semibold">View Details</span>
               </button>
             </div>
           );

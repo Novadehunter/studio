@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
 import { getMeetingTitleSuggestions } from "@/app/actions"
-import { type Booking, type BookingFormData, bookingFormSchema, branches } from "@/lib/types"
+import { type Booking, type BookingFormData, bookingFormSchema, branches, branchColors } from "@/lib/types"
 
 interface BookingFormProps {
   onAddBooking: (data: BookingFormData) => void;
@@ -99,8 +99,8 @@ export function BookingForm({ onAddBooking, existingBookings }: BookingFormProps
 
   return (
     <>
-      <h2 className="text-xl font-semibold text-slate-800 mb-4 flex items-center">
-        <CalendarPlus className="mr-2 h-5 w-5" /> New Booking
+      <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
+        <CalendarPlus className="mr-3 h-6 w-6 text-primary" /> New Booking
       </h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -123,7 +123,7 @@ export function BookingForm({ onAddBooking, existingBookings }: BookingFormProps
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Branch</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select a branch" />
@@ -131,7 +131,12 @@ export function BookingForm({ onAddBooking, existingBookings }: BookingFormProps
                   </FormControl>
                   <SelectContent>
                     {branches.map(branch => (
-                      <SelectItem key={branch} value={branch}>{branch}</SelectItem>
+                      <SelectItem key={branch} value={branch}>
+                        <div className="flex items-center">
+                          <span className={cn("w-2 h-2 rounded-full mr-2", branchColors[branch]?.bg)} />
+                          {branch}
+                        </div>
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -149,8 +154,8 @@ export function BookingForm({ onAddBooking, existingBookings }: BookingFormProps
                   <FormControl>
                     <Input placeholder="e.g. Project Alpha Review" {...field} />
                   </FormControl>
-                  <Button type="button" variant="outline" onClick={handleSuggestClick} disabled={isSuggesting}>
-                    {isSuggesting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lightbulb className="h-4 w-4" />}
+                  <Button type="button" variant="outline" onClick={handleSuggestClick} disabled={isSuggesting} className="bg-primary/10 border-primary/20 hover:bg-primary/20">
+                    {isSuggesting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lightbulb className="h-4 w-4 text-primary" />}
                     <span className="sr-only">Suggest Titles</span>
                   </Button>
                 </div>
@@ -160,14 +165,14 @@ export function BookingForm({ onAddBooking, existingBookings }: BookingFormProps
           />
 
           {suggestions.length > 0 && (
-             <div className="bg-background/50 p-2 rounded-md border">
-                <h3 className="text-sm font-medium text-foreground mb-1 px-2">AI Suggestions</h3>
+             <div className="bg-primary/5 p-3 rounded-md border border-primary/20">
+                <h3 className="text-sm font-medium text-primary-foreground mb-2 px-2">AI Suggestions</h3>
                 <div className="space-y-1">
                     {suggestions.map((suggestion, index) => (
                         <div key={index} 
-                             className="text-sm p-2 rounded-md cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors"
+                             className="text-sm p-2 rounded-md cursor-pointer hover:bg-primary/20 transition-colors"
                              onClick={() => {
-                                 form.setValue("title", suggestion);
+                                 form.setValue("title", suggestion, { shouldValidate: true });
                                  setSuggestions([]);
                              }}>
                             {suggestion}
@@ -244,7 +249,7 @@ export function BookingForm({ onAddBooking, existingBookings }: BookingFormProps
               )}
             />
           </div>
-          <Button type="submit" className="w-full bg-accent text-accent-foreground hover:bg-accent/90" disabled={form.formState.isSubmitting}>
+          <Button type="submit" className="w-full bg-accent text-accent-foreground hover:bg-accent/90 transition-all transform hover:scale-105" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CalendarCheck2 className="mr-2 h-4 w-4" />}
             Book Meeting
           </Button>

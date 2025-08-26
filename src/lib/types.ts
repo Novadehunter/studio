@@ -13,14 +13,14 @@ export type Booking = {
 export const branches = ["Technical", "Planning", "Development", "Accounts", "Admin", "Transport", "Legal"] as const;
 export type Branch = typeof branches[number];
 
-export const branchColors: Record<Branch, { bg: string, text: string, border: string }> = {
-  Technical: { bg: "bg-blue-100", text: "text-blue-800", border: "border-blue-500" },
-  Planning: { bg: "bg-green-100", text: "text-green-800", border: "border-green-500" },
-  Development: { bg: "bg-purple-100", text: "text-purple-800", border: "border-purple-500" },
-  Accounts: { bg: "bg-yellow-100", text: "text-yellow-800", border: "border-yellow-500" },
-  Admin: { bg: "bg-red-100", text: "text-red-800", border: "border-red-500" },
-  Transport: { bg: "bg-indigo-100", text: "text-indigo-800", border: "border-indigo-500" },
-  Legal: { bg: "bg-gray-100", text: "text-gray-800", border: "border-gray-500" },
+export const branchColors: Record<Branch, { bg: string, text: string, border: string, badgeBg: string }> = {
+  Technical: { bg: "bg-blue-50", text: "text-blue-800", border: "border-blue-500", badgeBg: "bg-blue-100" },
+  Planning: { bg: "bg-green-50", text: "text-green-800", border: "border-green-500", badgeBg: "bg-green-100" },
+  Development: { bg: "bg-purple-50", text: "text-purple-800", border: "border-purple-500", badgeBg: "bg-purple-100" },
+  Accounts: { bg: "bg-yellow-50", text: "text-yellow-800", border: "border-yellow-500", badgeBg: "bg-yellow-100" },
+  Admin: { bg: "bg-red-50", text: "text-red-800", border: "border-red-500", badgeBg: "bg-red-100" },
+  Transport: { bg: "bg-indigo-50", text: "text-indigo-800", border: "border-indigo-500", badgeBg: "bg-indigo-100" },
+  Legal: { bg: "bg-gray-50", text: "text-gray-800", border: "border-gray-500", badgeBg: "bg-gray-200" },
 };
 
 export const bookingFormSchema = z.object({

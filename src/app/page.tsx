@@ -6,6 +6,7 @@ import { BookingForm } from '@/components/booking-form';
 import { CalendarView } from '@/components/calendar-view';
 import { MeetingDetailsDialog } from '@/components/meeting-details-dialog';
 import type { Booking, BookingFormData } from '@/lib/types';
+import { motion } from 'framer-motion';
 
 function getInitialBookings(): Booking[] {
   const today = new Date();
@@ -48,24 +49,48 @@ export default function Home() {
     ? bookings.filter(b => isSameDay(new Date(b.date), selectedDate))
     : [];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1 }
+  };
+
   return (
     <>
       <main className="container mx-auto px-4 py-8">
-        <header className="mb-8 text-center">
-            <h1 className="text-4xl font-bold text-slate-800 mb-2 font-headline">Auditorium Booking System</h1>
-            <p className="text-slate-600">Ministry of Transport</p>
-            <p className="text-slate-500 text-sm">Book meeting rooms efficiently while ensuring no time conflicts</p>
-        </header>
+        <motion.header 
+          className="mb-12 text-center"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+            <h1 className="text-5xl font-bold text-gray-800 mb-2 font-headline bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">Auditorium Booking</h1>
+            <p className="text-slate-600 text-lg">Ministry of Transport</p>
+        </motion.header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
-            <div className="lg:col-span-2 bg-gradient-to-br from-card to-background backdrop-blur-sm rounded-xl shadow-lg p-6 border">
+        <motion.div 
+          className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+            <motion.div variants={itemVariants} className="lg:col-span-2 bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300 p-6 border border-gray-200/80">
                 <BookingForm onAddBooking={handleAddBooking} existingBookings={bookings} />
-            </div>
+            </motion.div>
             
-            <div className="lg:col-span-3 bg-gradient-to-br from-card to-background backdrop-blur-sm rounded-xl shadow-lg p-6 border">
+            <motion.div variants={itemVariants} className="lg:col-span-3 bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300 p-6 border border-gray-200/80">
                 <CalendarView bookings={bookings} onDayClick={handleDayClick} />
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
       </main>
       
       {selectedDate && (
