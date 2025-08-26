@@ -58,11 +58,11 @@ export default function Home() {
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
-            <div className="lg:col-span-2 bg-card/80 backdrop-blur-sm rounded-xl shadow-lg p-6 border">
+            <div className="lg:col-span-2 bg-gradient-to-br from-card to-background backdrop-blur-sm rounded-xl shadow-lg p-6 border">
                 <BookingForm onAddBooking={handleAddBooking} existingBookings={bookings} />
             </div>
             
-            <div className="lg:col-span-3 bg-card/80 backdrop-blur-sm rounded-xl shadow-lg p-6 border">
+            <div className="lg:col-span-3 bg-gradient-to-br from-card to-background backdrop-blur-sm rounded-xl shadow-lg p-6 border">
                 <CalendarView bookings={bookings} onDayClick={handleDayClick} />
             </div>
         </div>
